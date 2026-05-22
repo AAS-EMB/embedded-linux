@@ -1,0 +1,6 @@
+PYTHON_FB_PAINTER_VERSION     = 1.0.0
+PYTHON_FB_PAINTER_SITE        = $(BR2_EXTERNAL_EMBEDDED_LAB_PATH)/projects/fb-painter
+PYTHON_FB_PAINTER_SITE_METHOD = local
+PYTHON_FB_PAINTER_SETUP_TYPE  = setuptools
+
+$(eval $(python-package))

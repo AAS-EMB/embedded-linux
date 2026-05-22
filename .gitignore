@@ -1,0 +1,19 @@
+# Buildroot — скачивается скриптом, не хранится в репе
+buildroot-*/
+
+# Артефакты сборки
+br-external/output/
+
+# CMake
+build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

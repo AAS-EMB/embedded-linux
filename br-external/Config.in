@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_EMBEDDED_LAB_PATH/package/python-fb-painter/Config.in"

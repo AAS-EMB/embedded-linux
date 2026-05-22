@@ -1,0 +1,15 @@
+[build-system]
+requires      = ["setuptools>=61"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name            = "fb-painter"
+version         = "1.0.0"
+requires-python = ">=3.8"
+dependencies    = []
+
+[project.scripts]
+fb-painter = "fb_painter.main:run"
+
+[tool.setuptools.packages.find]
+where = ["."]
