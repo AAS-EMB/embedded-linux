@@ -1,4 +1,4 @@
-FB_DEV    = "/dev/fb1"
+FB_DEV    = "/dev/fb0"
 INPUT_DEV = "/dev/input/event0"
 
 WIDTH  = 320

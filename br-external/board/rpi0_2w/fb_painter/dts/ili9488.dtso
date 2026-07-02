@@ -1,0 +1,128 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            spidev@0 {
+                status = "disabled";
+            };
+            spidev@1 {
+                status = "disabled";
+            };
+        };
+    };
+
+    fragment@1 {
+		target = <&spi1>;
+		__overlay__ {
+            spidev@0 {
+                status = "disabled";
+            };
+            spidev@1 {
+                status = "disabled";
+            };
+        };
+	};
+
+    fragment@2 {
+        target-path = "/";
+        __overlay__ {
+            backlight_gpio: backlight_gpio {
+                compatible = "gpio-backlight";
+                gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
+                default-on;
+                status = "okay";
+            };
+
+            cam1_reg: cam1_reg {
+                compatible = "regulator-fixed";
+                regulator-name = "cam1_reg";
+                regulator-min-microvolt = <2800000>;
+                regulator-max-microvolt = <2800000>;
+                regulator-always-on;
+            };
+        };
+    };
+
+    fragment@3 {
+        target = <&gpio>;
+        __overlay__ {
+            ads7846_pins: ads7846_pins {
+                brcm,pins = <17>;
+                brcm,function = <0>;  /* input */
+                brcm,pull = <0>;      /* none — на плате уже есть pull-up */
+            };
+        };
+    };
+
+    fragment@4 {
+        target = <&spi0>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            ili9488: ili9488@0 {
+                compatible = "ili9488", "panel-mipi-dbi-spi";
+                reg = <0>;
+                spi-max-frequency = <32000000>;
+                dc-gpios    = <&gpio 24 GPIO_ACTIVE_HIGH>;
+                reset-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+                /* write-only; */
+                format = "b6x2g6x2r6x2";
+
+                width-mm  = <35>;
+                height-mm = <28>;
+
+                panel-timing {
+                    hactive     = <320>;
+                    vactive     = <480>;
+                    hback-porch = <0>;
+					vback-porch = <0>;
+
+					clock-frequency = <0>;
+					hfront-porch    = <0>;
+					hsync-len       = <0>;
+					vfront-porch    = <0>;
+					vsync-len       = <0>;
+                };
+            };
+        };
+    };
+
+    fragment@5 {
+        target = <&spi1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+            cs-gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+
+            ads7846: ads7846@0 {
+                compatible = "ti,ads7846";
+                reg = <0>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&ads7846_pins>;
+                spi-max-frequency = <2000000>;
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;
+                pendown-gpio = <&gpio 17 1>;
+
+                ti,x-min = /bits/ 16 <0>;
+                ti,x-max = /bits/ 16 <0x0FFF>;
+                ti,y-min = /bits/ 16 <0>;
+                ti,y-max = /bits/ 16 <0x0FFF>;
+                ti,pressure-min = /bits/ 16 <0>;
+                ti,pressure-max = /bits/ 16 <255>;
+                ti,x-plate-ohms = /bits/ 16 <60>;
+            };
+        };
+    };
+};
+
