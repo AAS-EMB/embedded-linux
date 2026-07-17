@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_FB_PAINTER
+    bool "python-fb-painter"
+    depends on BR2_PACKAGE_PYTHON3
+    select BR2_PACKAGE_PYTHON_NUMPY
+    help
+      Framebuffer painter with touch input.
+      Requires /dev/fb1 (DRM/fbdev) and /dev/input/event0 (XPT2046).

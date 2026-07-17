@@ -1,0 +1,7 @@
+br-external/output/
+buildroot-*/
+build-*/
+.git/
+docs/
+*.img
+*.tar.gz
