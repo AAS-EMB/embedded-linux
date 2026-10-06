@@ -1,0 +1,46 @@
+name: Build Buildroot image
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-base:
+    name: Raspberry Pi Zero 2 W / base
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Cache Buildroot downloads
+        uses: actions/cache@v4
+        with:
+          path: dl/
+          key: ${{ runner.os }}-buildroot-${{ hashFiles('scripts/versions.env', 'br-external/configs/rpi0_2w_base_defconfig') }}
+
+      - name: Build builder container
+        run: docker build --file docker/Dockerfile --tag embedded-linux-builder:ci docker
+
+      - name: Build base image
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "${GITHUB_WORKSPACE}:/workspace" \
+            --workdir /workspace \
+            embedded-linux-builder:ci
+
+      - name: Upload SD-card image
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpi0-2w-base-sdcard
+          path: br-external/output/rpi0_2w/base/images/sdcard.img
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

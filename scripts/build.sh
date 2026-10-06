@@ -38,6 +38,7 @@ BR_DIR="${ROOT_DIR}/buildroot-${BR_VERSION}"
 EXT_DIR="${ROOT_DIR}/br-external"
 PROFILE_DIR="${EXT_DIR}/board/${BOARD}/${PROJECT}"
 OUT_DIR="${EXT_DIR}/output/${BOARD}/${PROJECT}"
+DL_DIR="${ROOT_DIR}/dl"
 
 bash "${SCRIPT_DIR}/fetch-buildroot.sh"
 
@@ -47,6 +48,7 @@ bash "${SCRIPT_DIR}/fetch-buildroot.sh"
 echo "[build] Applying: ${DEFCONFIG}"
 make -C "${BR_DIR}" \
     BR2_EXTERNAL="${EXT_DIR}" \
+    BR2_DL_DIR="${DL_DIR}" \
     O="${OUT_DIR}" \
     "${DEFCONFIG}"
 
@@ -68,6 +70,7 @@ echo "[build] Preparing Linux source tree"
 
 make -C "${BR_DIR}" \
     BR2_EXTERNAL="${EXT_DIR}" \
+    BR2_DL_DIR="${DL_DIR}" \
     O="${OUT_DIR}" \
     linux-patch
 
@@ -110,6 +113,7 @@ fi
 echo "[build] board=${BOARD} project=${PROJECT} target=${MAKE_TARGET:-all}"
 make -C "${BR_DIR}" \
     BR2_EXTERNAL="${EXT_DIR}" \
+    BR2_DL_DIR="${DL_DIR}" \
     O="${OUT_DIR}" \
     ${MAKE_TARGET}
 

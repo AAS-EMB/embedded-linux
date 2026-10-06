@@ -1,5 +1,6 @@
 # Buildroot — скачивается скриптом, не хранится в репе
 buildroot-*/
+dl/
 
 # Артефакты сборки
 br-external/output/
